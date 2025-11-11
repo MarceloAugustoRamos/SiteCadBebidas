@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Clientes e Vendas</h2>
+{% for c in clientes %}
+  <div class="card mb-3">
+    <div class="card-header"><strong>{{ c.nome }}</strong></div>
+    <div class="card-body">
+      {% if c.vendas %}
+        <ul>
+        {% for v in c.vendas %}
+          <li>{{ v.get_nome() }} - {{ v.get_categoria() }} - R$ {{ v.preco }}</li>
+        {% endfor %}
+        </ul>
+      {% else %}
+        <p>Nenhuma venda registrada.</p>
+      {% endif %}
+    </div>
+  </div>
+{% endfor %}
+{% endblock %}
