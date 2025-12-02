@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="text-center mb-4">Lista de Bebidas</h2>
+
+<div class="table-responsive bg-white p-3 shadow-sm rounded">
+<table class="table table-hover align-middle">
+
+<thead class="table-primary">
+<tr>
+  <th>#</th>
+  <th>Nome</th>
+  <th>Preço</th>
+  <th>Categoria</th>
+  <th>Ações</th>
+</tr>
+</thead>
+
+<tbody>
+{% for b in bebidas %}
+<tr>
+  <td>{{ loop.index0 }}</td>
+  <td>{{ b.get_nome() }}</td>
+  <td>R$ {{ b.preco }}</td>
+  <td>{{ b.get_categoria() }}</td>
+  <td>
+
+    <a href="{{ url_for('bebidas.editar_bebida', indice=loop.index0) }}" 
+       class="btn btn-sm btn-primary">
+        Editar
+    </a>
+
+    <form method="post" 
+          action="{{ url_for('bebidas.excluir_bebida', indice=loop.index0) }}" 
+          style="display:inline;">
+      <button class="btn btn-sm btn-danger">Excluir</button>
+    </form>
+
+  </td>
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+</div>
+{% endblock %}

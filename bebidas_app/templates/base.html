@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Sistema de Bebidas{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <style>
+    :root{
+      --sidebar-width: 220px;
+      --app-header-height: 64px;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+      background-color: #F9F9F9;
+    }
+
+    .sidebar {
+      width: var(--sidebar-width);
+      background: linear-gradient(180deg, #0d6efd 0%, #0a58ca 100%);
+      color: white;
+      flex-shrink: 0;
+      padding: 20px 0;
+      position: relative;
+      z-index: 20; /* manter o menu acima do header */
+      transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar h4 {
+      text-align: center;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      transition: background 0.2s;
+    }
+
+    .sidebar a:hover {
+      background-color: #0b5ed7;
+    }
+
+    .content {
+      flex-grow: 1;
+      /* compensar header fixo no topo */
+      padding-top: calc(var(--app-header-height) + 20px);
+      padding-right: 20px;
+      padding-bottom: 20px;
+      padding-left: 20px;
+    }
+    /* Header do app */
+    .app-header {
+      background: #FAFBFC;
+      /* ocupa 100% da viewport */
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: var(--app-header-height);
+      box-sizing: border-box;
+      border-radius: 0; /* full-width não precisa de bordas arredondadas */
+      padding: 12px 18px;
+      /* alinhar o conteúdo com a área principal (desloca para a direita igual à sidebar)
+         assim o título não fica coberto pelo menu lateral */
+      padding-left: calc(var(--sidebar-width) + 18px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 6px rgba(16,24,40,0.06);
+      z-index: 10; /* menor que a sidebar */
+    }
+    .app-header h1 {
+      margin: 0;
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+    .app-header .subtitle {
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+    /* Transições suaves para flash alerts */
+    .alert {
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+    /* Ajuste da animação fade/slide usada pelas classes Bootstrap */
+    .alert.fade {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    .alert.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+   
+    /* Responsividade */
+    /* Tablets (768px até 1024px) */
+    @media (max-width: 1024px) {
+      :root {
+        --sidebar-width: 200px;
+      }
+    }
+
+  
+
+    /* Celulares e tablets pequenos (até 768px) */
+    @media (max-width: 768px) {
+      :root {
+        --sidebar-width: 250px;
+      }
+
+      .app-header.sidebar-hidden {
+        padding-left: 18px; /* Remove o deslocamento do header */
+      }
+
+      .content.sidebar-hidden {
+        padding-left: 20px; /* Remove o deslocamento do conteúdo */
+      }
+
+      body {
+        flex-direction: column;      }
+
+      
+
+      .sidebar.active {
+        left: 0;
+      }
+
+      .sidebar h4 {
+        position: relative;
+      }
+
+      .content {
+        width: 100%;
+        padding-top: calc(var(--app-header-height) + 20px);
+      }
+
+      .app-header {
+        padding-left: 18px;
+        transition: padding-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 100%;
+      }
+
+      .app-header h1 {
+        font-size: 1rem;
+      }
+
+      .app-header .subtitle {
+        display: none;
+      }
+    }
+
+    /* Celulares pequenos (até 480px) */
+    @media (max-width: 480px) {
+      :root {
+        --app-header-height: 56px;
+      }
+
+      .app-header {
+        padding: 8px 12px;
+      }
+
+      .app-header h1 {
+        font-size: 0.95rem;
+      }
+
+      .content {
+        padding: calc(var(--app-header-height) + 12px) 12px 12px 12px;
+        transition: padding-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .sidebar {
+        width: 100%;
+        padding-top: 50px;
+      }
+
+      .sidebar h4 {
+        font-size: 1.1rem;
+      }
+
+      .sidebar a {
+        padding: 12px 16px;
+        font-size: 0.95rem;
+      }
+
+      .sidebar-toggle {
+        top: 8px;
+        right: 8px;
+        font-size: 1.3rem;
+      }
+    }
+
+    /* TV / Desktop grande (acima de 1440px) */
+    @media (min-width: 1440px) {
+      :root {
+        --sidebar-width: 260px;
+        --app-header-height: 72px;
+      }
+
+      .app-header h1 {
+        font-size: 1.3rem;
+      }
+
+      .app-header .subtitle {
+        font-size: 1rem;
+      }
+
+      .sidebar h4 {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+      }
+
+      .sidebar a {
+        padding: 14px 24px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="sidebar" id="sidebar">
+    <h4>
+      <span> Bebidas</span>
+    </h4>
+    <a href="{{ url_for('index') }}"><i class="bi bi-house"></i> Início</a>
+    <a href="{{ url_for('bebidas.cadastrar_bebida') }}"><i class="bi bi-plus-circle"></i> Cadastrar</a>
+    <a href="{{ url_for('bebidas.listar_bebidas') }}"><i class="bi bi-list-ul"></i> Listar</a>
+    <a href="{{ url_for('vendas.registrar_venda') }}"><i class="bi bi-cash-coin"></i> Registrar Venda</a>
+    <a href="{{ url_for('clientes.listar_clientes') }}"><i class="bi bi-person"></i> Clientes</a>
+  </div>
+
+  <div class="content">
+    <header class="app-header" id="app-header">
+      <div>
+        <h1>Sistema de Bebidas</h1>
+        <div class="subtitle">Gerencie bebidas, vendas e clientes</div>
+      </div>
+      <div>
+        <!-- espaço para ações rápidas/usuário -->
+      </div>
+    </header>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, msg in messages %}
+    <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+      {{ msg }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+    </div>
+    {% endfor %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Fecha automaticamente alertas após 4 segundos (4000ms)
+        const alerts = document.querySelectorAll('.alert-dismissible');
+        alerts.forEach(alert => {
+          setTimeout(() => {
+            try {
+              const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+              bsAlert.close();
+            } catch (e) {
+              alert.remove();
+            }
+          }, 4000);
+        });       
+      });
+    </script>
+
+  </body>
+
+  </html>

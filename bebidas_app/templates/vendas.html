@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container" style="max-width:550px;">
+  <h2 class="text-center mb-4">Registrar Venda</h2>
+
+  <form method="post" action="{{ url_for('vendas.registrar_venda') }}" class="p-3 shadow-sm bg-white rounded">
+
+    <input name="cliente" class="form-control mb-3" placeholder="Nome do cliente" required>
+
+    <div class="border p-3 mb-3 bg-light rounded" style="max-height:260px; overflow-y:auto;">
+      {% for b in bebidas %}
+      <div class="form-check mb-2">
+        <input class="form-check-input venda-checkbox"
+               id="b{{ loop.index0 }}"
+               type="checkbox"
+               name="bebidas"
+               value="{{ loop.index0 }}">
+        <label class="form-check-label" for="b{{ loop.index0 }}">
+          {{ b.get_nome() }} — R$ {{ b.preco }}
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+
+    <button class="btn btn-success w-100">Registrar</button>
+  </form>
+</div>
+{% endblock %}

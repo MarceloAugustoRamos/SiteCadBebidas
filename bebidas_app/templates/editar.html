@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Editar Bebida{% endblock %}
+{% block content %}
+
+<div class="container" style="max-width: 550px; margin-top: 30px;">
+  <h2 class="text-center mb-4">Editar Bebida</h2>
+
+  <form method="post" action="{{ url_for('bebidas.editar_bebida', indice=indice) }}"
+        class="p-4 shadow-sm rounded bg-white">
+
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Nome</label>
+      <input type="text" name="nome" value="{{ bebida.get_nome() }}" 
+             class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Preço (R$)</label>
+      <input type="number" step="0.01" min="0" name="preco"
+             value="{{ bebida.preco }}" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Categoria</label>
+      <select name="categoria" class="form-select">
+        {% for c in categorias %}
+          <option value="{{ c }}" 
+            {% if c == bebida.get_categoria() %}selected{% endif %}>
+            {{ c }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="d-flex mt-4 gap-2">
+      <button type="submit" class="btn btn-success w-100">Salvar</button>
+      <a href="{{ url_for('bebidas.listar_bebidas') }}" 
+         class="btn btn-secondary w-100">Cancelar</a>
+    </div>
+
+  </form>
+</div>
+
+{% endblock %}

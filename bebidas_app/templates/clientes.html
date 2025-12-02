@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2 class="mb-4 text-center">Clientes e Vendas</h2>
+
+{% if clientes %}
+  {% for c in clientes %}
+    <div class="card shadow-sm mb-3">
+
+      <div class="card-header bg-primary text-white fw-semibold">
+        <i class="bi bi-person-circle me-2"></i> {{ c.nome }}
+      </div>
+
+      <div class="card-body">
+        {% if c.vendas %}
+          <ul class="list-group list-group-flush">
+            {% for v in c.vendas %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>{{ v.get_nome() }}</strong>
+                  <span class="text-muted">({{ v.get_categoria() }})</span>
+                </div>
+                <span class="fw-bold">R$ {{ v.preco }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted text-center m-2">Nenhuma venda registrada.</p>
+        {% endif %}
+      </div>
+
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="alert alert-info text-center">
+    Nenhum cliente encontrado.
+  </div>
+{% endif %}
+
+{% endblock %}
